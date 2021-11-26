@@ -10,11 +10,6 @@ import java.util.List;
 @Repository
 public class UserDaoImp implements UserDao {
 
-    private String qs =
-            "SELECT u " +
-                    "FROM User u INNER JOIN u.car c " +
-                    "WHERE c.model = :model and c.series = :series";
-
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -34,7 +29,8 @@ public class UserDaoImp implements UserDao {
     public User getUserByCar(String model, int series) {
 
         return (User) sessionFactory.openSession()
-                .createQuery(qs)
+                .createQuery("SELECT u FROM User u  " +
+                        "WHERE u.car.model = :model and u.car.series = :series")
                 .setParameter("model", model)
                 .setParameter("series", series)
                 .list()
